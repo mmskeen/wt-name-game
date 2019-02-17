@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="WTNameGame.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WTNameGame"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel>
+            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="30" VerticalAlignment="Top" Click="BtnPlay_Click"/>
+            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="Placeholder" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" TextAlignment="Center" Height="100"/>
+            <GridView x:Name="ProfileGrid"
+                      ItemsSource="{x:Bind ProfileShots}"
+                      HorizontalAlignment="Stretch"
+                      Margin="10, 0, 0, 0">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="local:ProfileShot">
+                        <Grid Background="White"
+                              Margin="10"
+                              Height="270"
+                              Width="200">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Background="White" Tapped="Panel_Tapped">
+                                <Image x:Name="MyImage"
+                                       Source="{x:Bind Url}"
+                                       />
+                                <TextBlock Margin="10"
+                                           Text="{x:Bind FullName}"
+                                           x:Name="NameTxt"
+                                           FontSize="18"
+                                           TextWrapping="Wrap"
+                                           Visibility="{x:Bind TextVisible}"
+                                           />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </StackPanel>
+    </Grid>
+</Page>
