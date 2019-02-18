@@ -10,14 +10,14 @@
 
     <Grid>
         <StackPanel>
-            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="30" VerticalAlignment="Top" Click="BtnPlay_Click"/>
-            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="Placeholder" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" TextAlignment="Center" Height="100"/>
+            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="40" VerticalAlignment="Top" Click="BtnPlay_Click"/>
+            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="Who is ... ?" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" TextAlignment="Center" Height="100" FontSize="18"/>
             <GridView x:Name="ProfileGrid"
-                      ItemsSource="{x:Bind ProfileShots}"
+                      ItemsSource="{x:Bind ProfileShots, Mode=OneWay}"
                       HorizontalAlignment="Stretch"
                       Margin="10, 0, 0, 0">
                 <GridView.ItemTemplate>
-                    <DataTemplate x:DataType="local:ProfileShot">
+                    <DataTemplate x:Name="GridViewDataTemplate" x:DataType="local:ProfileShot">
                         <Grid Background="White"
                               Margin="10"
                               Height="270"
@@ -27,14 +27,15 @@
                             </Grid.RowDefinitions>
                             <StackPanel Background="White" Tapped="Panel_Tapped">
                                 <Image x:Name="MyImage"
-                                       Source="{x:Bind Url}"
+                                       Source="{x:Bind Url, Mode=OneWay}"
                                        />
                                 <TextBlock Margin="10"
-                                           Text="{x:Bind FullName}"
+                                           Text="{x:Bind FullName, Mode=OneWay}"
                                            x:Name="NameTxt"
+                                           VerticalAlignment="Bottom"
                                            FontSize="18"
                                            TextWrapping="Wrap"
-                                           Visibility="{x:Bind TextVisible}"
+                                           Visibility="{x:Bind TextVisible, Mode=OneWay}"
                                            />
                             </StackPanel>
                         </Grid>

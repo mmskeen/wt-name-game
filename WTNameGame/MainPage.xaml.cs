@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -27,7 +17,11 @@ namespace WTNameGame
     {
         private Game game;
         public ObservableCollection<ProfileShot> ProfileShots { get; set; }
+        public ProfileShot CorrectProfile { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainPage()
         {
             this.InitializeComponent();
@@ -36,31 +30,43 @@ namespace WTNameGame
             game.ProfilesGenerated += OnProfilesGenerated;
         }
 
-        public void AddHeadshot(string name, string url)
-        {
-
-        }
-
+        /// <summary>
+        /// Play Button Event Handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
             this.game.Play();
         }
 
+        /// <summary>
+        /// Event Handler for new profile shots being generated
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="eventArgs"></param>
         public void OnProfilesGenerated(Object source, ProfilesEventArgs eventArgs)
         {
             ProfileShots = eventArgs.ProfileShots;
-            txtWhois.Text = eventArgs.CorrectProfile.FullName;
-            this.Bindings.Update();
+            CorrectProfile = eventArgs.CorrectProfile;
+            txtWhois.Text = "Who is " + eventArgs.CorrectProfile.FullName + "?";
+
+            // Bindings.Update often gives an error message before compiling, but should be OK
+            Bindings.Update();
         }
 
+        /// <summary>
+        /// Tapping an Image event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Panel_Tapped(object sender, TappedRoutedEventArgs e)
         {
             StackPanel panel = sender as StackPanel;
             ProfileShot shot = panel.DataContext as ProfileShot;
-            panel.Background = new SolidColorBrush(shot.FullName.Equals(txtWhois.Text) ?
-                Colors.BlueViolet : Colors.Red);
+            panel.Background = new SolidColorBrush(shot.FullName.Equals(CorrectProfile.FullName) ?
+                Colors.LightGreen : Colors.LightCoral);
             shot.TextVisible = Visibility.Visible;
-            this.Bindings.Update();
         }
     }
 }
