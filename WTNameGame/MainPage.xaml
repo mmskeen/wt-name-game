@@ -7,11 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.DataContext>
+        <local:MainViewModel/>
+    </Page.DataContext>
     <Grid>
         <StackPanel>
-            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="30" VerticalAlignment="Top" Click="BtnPlay_Click"/>
-            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="Placeholder" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" TextAlignment="Center" Height="100"/>
+            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="30" VerticalAlignment="Top" Command="{Binding PlayButtonClicked}"/>
+            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="{Binding WhoIsText, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" TextAlignment="Center" Height="100"/>
             <GridView x:Name="ProfileGrid"
                       ItemsSource="{x:Bind ProfileShots}"
                       HorizontalAlignment="Stretch"
@@ -30,7 +32,7 @@
                                        Source="{x:Bind Url}"
                                        />
                                 <TextBlock Margin="10"
-                                           Text="{x:Bind FullName}"
+                                           Text="{x:Bind FullName, Mode=OneWay}"
                                            x:Name="NameTxt"
                                            FontSize="18"
                                            TextWrapping="Wrap"

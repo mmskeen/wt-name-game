@@ -66,11 +66,22 @@ namespace WTNameGame
         public ProfileShot CorrectProfile { get; set; }
     }
 
-    public class ProfileShot
+    public class ProfileShot : MainViewModelBase
     {
-        private string url_;
+        private string url_, fullName_;
         public Visibility TextVisible { get; set; }
-        public string FullName { get; set; }
+        public string FullName
+        {
+            get
+            {
+                return fullName_;
+            }
+            set
+            {
+                fullName_ = value;
+                OnPropertyChanged(nameof(FullName));
+            }
+        }
         public string Url
         {
             get
@@ -80,6 +91,7 @@ namespace WTNameGame
             set
             {
                 url_ = value;
+                OnPropertyChanged(nameof(Url));
             }
         }
         public ProfileShot(string fullname, string url)

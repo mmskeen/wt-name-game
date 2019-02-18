@@ -31,26 +31,11 @@ namespace WTNameGame
         public MainPage()
         {
             this.InitializeComponent();
-            this.DataContext = ProfileShots;
-            game = new Game();
-            game.ProfilesGenerated += OnProfilesGenerated;
-        }
-
-        public void AddHeadshot(string name, string url)
-        {
-
         }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
             this.game.Play();
-        }
-
-        public void OnProfilesGenerated(Object source, ProfilesEventArgs eventArgs)
-        {
-            ProfileShots = eventArgs.ProfileShots;
-            txtWhois.Text = eventArgs.CorrectProfile.FullName;
-            this.Bindings.Update();
         }
 
         private void Panel_Tapped(object sender, TappedRoutedEventArgs e)
