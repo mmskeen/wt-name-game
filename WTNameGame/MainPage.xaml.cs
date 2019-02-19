@@ -27,10 +27,13 @@ namespace WTNameGame
     {
         private Game game;
         public ObservableCollection<ProfileShot> ProfileShots { get; set; }
+        private MainViewModel vm;
 
         public MainPage()
         {
             this.InitializeComponent();
+            vm = this.DataContext as MainViewModel;
+            vm.ViewModelUpdated += OnViewModelUpdated;
         }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
@@ -38,14 +41,24 @@ namespace WTNameGame
             this.game.Play();
         }
 
+        /// <summary>
+        /// Tapping an Image event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Panel_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            StackPanel panel = sender as StackPanel;
-            ProfileShot shot = panel.DataContext as ProfileShot;
-            panel.Background = new SolidColorBrush(shot.FullName.Equals(txtWhois.Text) ?
-                Colors.BlueViolet : Colors.Red);
+            Button btn = sender as Button;
+            ProfileShot shot = btn.DataContext as ProfileShot;
+            shot.Background = new SolidColorBrush(shot.FullName.Equals("Tony") ?
+                Colors.LightGreen : Colors.LightCoral);
             shot.TextVisible = Visibility.Visible;
+        }
+
+        private void OnViewModelUpdated(object sender, EventArgs e)
+        {
             this.Bindings.Update();
         }
     }
+
 }

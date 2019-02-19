@@ -126,7 +126,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="MainViewModelBase.cs" />
+    <Compile Include="ModelBase.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

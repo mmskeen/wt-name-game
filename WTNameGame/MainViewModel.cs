@@ -8,17 +8,19 @@ using System.Windows.Input;
 
 namespace WTNameGame
 {
-    class MainViewModel : MainViewModelBase
+    class MainViewModel : ModelBase
     {
         private Game game = null;
-        private string whoIsText = "";
+        private string whoIsText = "...";
         private ObservableCollection<ProfileShot> profileShots;
+
+        public event EventHandler ViewModelUpdated;
 
         public string WhoIsText
         {
             get
             {
-                return whoIsText;
+                return "Who is " + whoIsText + "?";
             }
             set
             {
@@ -62,6 +64,12 @@ namespace WTNameGame
         {
             ProfileShots = eventArgs.ProfileShots;
             WhoIsText = eventArgs.CorrectProfile.FullName;
+            OnViewModelUpdated();
+        }
+
+        protected virtual void OnViewModelUpdated()
+        {
+            ViewModelUpdated?.Invoke(this, EventArgs.Empty);
         }
 
 

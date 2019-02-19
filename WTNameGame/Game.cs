@@ -19,23 +19,26 @@ namespace WTNameGame
 
         public event EventHandler<ProfilesEventArgs> ProfilesGenerated;
 
-        public Game() { }
-
-        public void Play()
+        /// <summary>
+        /// Constructor -- immediately fetches json profile data and stores in ProfileList
+        /// </summary>
+        public Game()
         {
             var client = new RestClient("https://willowtreeapps.com/api/");
-
             var request = new RestRequest("v1.0/profiles/", Method.GET)
             {
                 OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; }
             };
-
             var queryResult = client.Execute(request);
-
             profileList = JsonConvert.DeserializeObject<List<Profile>>(queryResult.Content);
+        }
 
+        /// <summary>
+        /// Generate five new profileShots (and a correct profile) to play a new game
+        /// </summary>
+        public void Play()
+        {
             profileShots.Clear();
-
             while (profileShots.Count < selectionSize)
             {
                 int r = rnd.Next(profileList.Count);
@@ -47,6 +50,9 @@ namespace WTNameGame
             OnProfilesGenerated();
         }
 
+        /// <summary>
+        /// Publish (raise) an event that new profile shots have been generated
+        /// </summary>
         protected virtual void OnProfilesGenerated()
         {
             if (ProfilesGenerated != null)
@@ -60,45 +66,58 @@ namespace WTNameGame
         }
     }
 
+    /// <summary>
+    /// EventArgs class to hold profile data in ProfilesGenerated event parameters
+    /// </summary>
     public class ProfilesEventArgs : EventArgs
     {
         public ObservableCollection<ProfileShot> ProfileShots { get; set; }
         public ProfileShot CorrectProfile { get; set; }
     }
 
-    public class ProfileShot : MainViewModelBase
+    /// <summary>
+    /// ProfileShot class to hold employee faces, names, etc. for the game
+    /// </summary>
+    public class ProfileShot : ModelBase
     {
-        private string url_, fullName_;
-        public Visibility TextVisible { get; set; }
-        public string FullName
+        private const string URL_PREFIX = "http:";
+        private string url_;
+        private Visibility textVisible = Visibility.Collapsed;
+        private SolidColorBrush background = new SolidColorBrush(Colors.White);
+        public Visibility TextVisible
         {
-            get
-            {
-                return fullName_;
-            }
+            get => textVisible;
             set
             {
-                fullName_ = value;
-                OnPropertyChanged(nameof(FullName));
+                textVisible = value;
+                OnPropertyChanged(nameof(TextVisible));
             }
         }
+        public string FullName { get; set; }
         public string Url
         {
-            get
-            {
-                return "http:" + url_;
-            }
+            get => URL_PREFIX + url_;
             set
             {
-                url_ = value;
-                OnPropertyChanged(nameof(Url));
+                // Using conditional to prevent runtime errors for null url's from json data (WillowTree logo)
+                url_ = value != null ? value : "//images.ctfassets.net/3cttzl4i3k1h/1PoufpRNis4mmAmiqkA0ge/ef1fc7606584d54b5892010a65a5a262/WT_Logo-Hye-tTeI0Z.png";
             }
         }
+
+        public SolidColorBrush Background
+        {
+            get => background;
+            set
+            {
+                background = value;
+                OnPropertyChanged(nameof(Background));
+            }
+        }
+
         public ProfileShot(string fullname, string url)
         {
             this.FullName = fullname;
             this.Url = url;
-            this.TextVisible = Visibility.Collapsed;
         }
     }
 }

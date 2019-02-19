@@ -12,10 +12,10 @@
     </Page.DataContext>
     <Grid>
         <StackPanel>
-            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="30" VerticalAlignment="Top" Command="{Binding PlayButtonClicked}"/>
-            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="{Binding WhoIsText, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" Width="522" TextAlignment="Center" Height="100"/>
+            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="40" VerticalAlignment="Top" Command="{Binding PlayButtonClicked}"/>
+            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="{Binding WhoIsText, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" TextAlignment="Center" Height="100" FontSize="18"/>
             <GridView x:Name="ProfileGrid"
-                      ItemsSource="{x:Bind ProfileShots}"
+                      ItemsSource="{x:Bind ProfileShots, Mode=OneWay}"
                       HorizontalAlignment="Stretch"
                       Margin="10, 0, 0, 0">
                 <GridView.ItemTemplate>
@@ -27,18 +27,20 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <StackPanel Background="White" Tapped="Panel_Tapped">
-                                <Image x:Name="MyImage"
-                                       Source="{x:Bind Url}"
+                            <Button Tapped="Panel_Tapped" Background="{x:Bind Background, Mode=OneWay}">
+                                <StackPanel Background="White" Tapped="Panel_Tapped">
+                                    <Image x:Name="MyImage"
+                                       Source="{x:Bind Url, Mode=OneWay}"
                                        />
-                                <TextBlock Margin="10"
+                                    <TextBlock Margin="10"
                                            Text="{x:Bind FullName, Mode=OneWay}"
                                            x:Name="NameTxt"
                                            FontSize="18"
                                            TextWrapping="Wrap"
-                                           Visibility="{x:Bind TextVisible}"
+                                           Visibility="{x:Bind TextVisible, Mode=OneWay}"
                                            />
-                            </StackPanel>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
