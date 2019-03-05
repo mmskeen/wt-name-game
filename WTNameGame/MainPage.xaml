@@ -9,39 +9,73 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel>
-            <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="40" VerticalAlignment="Top" Click="BtnPlay_Click"/>
-            <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="20" Text="Who is ... ?" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" TextAlignment="Center" Height="100" FontSize="18"/>
-            <GridView x:Name="ProfileGrid"
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <StackPanel Width="550" Background="#FFDEDEDE" Margin="0,50,0,5" HorizontalAlignment="Center">
+                <StackPanel 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,20,0,0">
+                    <RadioButton IsChecked="{x:Bind IsRegularModeChecked, Mode=TwoWay}"
+                                 Content="Regular"/>
+                    <RadioButton IsChecked="{x:Bind IsMattModeChecked, Mode=TwoWay}"
+                                 Content="Matt Mode"/>
+                    <RadioButton IsChecked="{x:Bind IsMModeChecked, Mode=TwoWay}"
+                                 Content="M* Mode"/>
+                    <RadioButton IsChecked="{x:Bind IsReverseModeChecked, Mode=TwoWay}"
+                                 Content="Reverse"/>
+                </StackPanel>
+                    <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="15" VerticalAlignment="Top" Click="BtnPlay_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="0,15,0,5" Text="Who is ... ?" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" TextAlignment="Center" Height="60" FontSize="18"/>
+                <Image x:Name="imageWhois" Height="150" Width="150" Visibility="Collapsed" Margin="0,0,0,10"/>
+                <GridView x:Name="ProfileGridView"
                       ItemsSource="{x:Bind ProfileShots, Mode=OneWay}"
                       HorizontalAlignment="Stretch"
                       Margin="10, 0, 0, 0">
-                <GridView.ItemTemplate>
-                    <DataTemplate x:Name="GridViewDataTemplate" x:DataType="local:ProfileShot">
-                        <Grid Background="White"
+                    <GridView.Resources>
+                        <Storyboard x:Name="BeginFadeOut">
+                            <FadeOutThemeAnimation Storyboard.TargetName="ProfileGridView" />
+                        </Storyboard>
+                        <Storyboard x:Name="BeginFadeIn">
+                            <FadeInThemeAnimation Storyboard.TargetName="ProfileGridView" />
+                        </Storyboard>
+                    </GridView.Resources>
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:Name="GridViewDataTemplate" x:DataType="local:ProfileShot">
+                            <Grid Background="White"
+                                  x:Name="DataGrid"
+                                  Tapped="Grid_Tapped" 
                               Margin="10"
-                              Height="270"
-                              Width="200">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <StackPanel Background="White" Tapped="Panel_Tapped">
+                              Height="200"
+                              Width="150">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="150"/>
+                                </Grid.RowDefinitions>
                                 <Image x:Name="MyImage"
                                        Source="{x:Bind Url, Mode=OneWay}"
+                                       Grid.Row="1"
+                                       VerticalAlignment="Top"
+                                       Margin="5"
+                                       Opacity="{x:Bind ImageOpacity, Mode=OneWay}"
                                        />
-                                <TextBlock Margin="10"
-                                           Text="{x:Bind FullName, Mode=OneWay}"
-                                           x:Name="NameTxt"
-                                           VerticalAlignment="Bottom"
-                                           FontSize="18"
-                                           TextWrapping="Wrap"
-                                           Visibility="{x:Bind TextVisible, Mode=OneWay}"
-                                           />
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
-        </StackPanel>
+                                <TextBlock Margin="5"
+                                        Text="{x:Bind FullName, Mode=OneWay}"
+                                        x:Name="NameTxt"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        FontSize="18"
+                                        TextWrapping="Wrap"
+                                        Opacity="{x:Bind TextOpacity, Mode=OneWay}"
+                                        Grid.Row="0"
+                                        />
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
