@@ -5,41 +5,74 @@
     xmlns:local="using:WTNameGame"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <MediaElement x:Name="myMediaElement"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#FFDEDEDE">
             <StackPanel>
-                <StackPanel Width="550" Background="#FFDEDEDE" Margin="0,50,0,5" HorizontalAlignment="Center">
-                <StackPanel 
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Margin="0,20,0,0">
-                    <RadioButton IsChecked="{x:Bind IsRegularModeChecked, Mode=TwoWay}"
-                                 Content="Regular"/>
-                    <RadioButton IsChecked="{x:Bind IsMattModeChecked, Mode=TwoWay}"
-                                 Content="Matt Mode"/>
-                    <RadioButton IsChecked="{x:Bind IsMModeChecked, Mode=TwoWay}"
-                                 Content="M* Mode"/>
-                    <RadioButton IsChecked="{x:Bind IsReverseModeChecked, Mode=TwoWay}"
-                                 Content="Reverse"/>
+                <TextBlock x:Name="titleText" HorizontalAlignment="Center" Margin="0,20,0,0" Text="Who's Who?" FontSize="24" FontWeight="SemiBold"
+                           ToolTipService.ToolTip="Learn your coworkers' names with this new name game app!"/>
+                <Border BorderBrush="Gray" BorderThickness="0.5" Margin="0,10,0,0" Width="100">
+                    <TextBlock x:Name="scoreText" HorizontalAlignment="Center" Text="0 / 0" FontSize="18" 
+                           Tapped="ScoreText_Tapped" ToolTipService.ToolTip="Click to reset score"/>
+                </Border>
+                <StackPanel Width="600" Margin="0,0,0,5" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Storyboard x:Name="FadeInWhoIsImageRect">
+                            <DoubleAnimation Storyboard.TargetName="rectWhois"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="0" To="1.0" Duration="{x:Bind ShortFadeDuration}"/>
+                        </Storyboard>
+                        <Storyboard x:Name="FadeOutWhoIsImageRect">
+                            <DoubleAnimation Storyboard.TargetName="rectWhois"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="1.0" To="0" Duration="{x:Bind ShortFadeDuration}"/>
+                        </Storyboard>
+                    </StackPanel.Resources>
+                    <StackPanel 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="0,20,0,0">
+                        <RadioButton IsChecked="{x:Bind IsRegularModeChecked, Mode=TwoWay}"
+                                     Content="Regular" ToolTipService.ToolTip="Show everyone"/>
+                        <RadioButton IsChecked="{x:Bind IsMattModeChecked, Mode=TwoWay}"
+                                     Content="Matt Mode" ToolTipService.ToolTip="Show only names beginning with Mat(t)"/>
+                        <RadioButton IsChecked="{x:Bind IsMModeChecked, Mode=TwoWay}"
+                                     Content="M* Mode" ToolTipService.ToolTip="Show only names beginning with M"/>
+                        <RadioButton IsChecked="{x:Bind IsTeamModeChecked, Mode=TwoWay}"
+                                     Content="Team Mode" ToolTipService.ToolTip="Show only those with a current job title at WillowTree"/>
+                    </StackPanel>
+                    <ToggleSwitch IsOn="{x:Bind IsReverseModeChecked, Mode=TwoWay}" HorizontalAlignment="Center" Margin="110, 10, 0, 0" 
+                                     Header="Reverse" OnContent="" OffContent="" ToolTipService.ToolTip="Match displayed picture to a name"/>
+                    <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="25" FontSize="25" Click="BtnPlay_Click"/>
                 </StackPanel>
-                    <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Center" Margin="15" VerticalAlignment="Top" Click="BtnPlay_Click"/>
-                </StackPanel>
-                <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="0,15,0,5" Text="Who is ... ?" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" TextAlignment="Center" Height="60" FontSize="18"/>
-                <Image x:Name="imageWhois" Height="150" Width="150" Visibility="Collapsed" Margin="0,0,0,10"/>
-                <GridView x:Name="ProfileGridView"
+                <TextBlock x:Name="txtWhois" HorizontalAlignment="Center" Margin="0,0,0,0" Text="Who is ... ?" TextAlignment="Center" Height="60" FontSize="18"/>
+                <Rectangle RadiusX="10" RadiusY="10" Margin="0,0,0,40"
+                           x:Name="rectWhois" Height="150" Width="150" Visibility="Collapsed">
+                    <Rectangle.Fill>
+                        <ImageBrush x:Name="imageWhois" Stretch="UniformToFill"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <controls:AdaptiveGridView x:Name="ProfileGridView"
                       ItemsSource="{x:Bind ProfileShots, Mode=OneWay}"
                       HorizontalAlignment="Stretch"
-                      Margin="10, 0, 0, 0">
+                      Margin="10, 0, 0, 0"
+                      ItemHeight="250"
+                      DesiredWidth="180">
                     <GridView.Resources>
-                        <Storyboard x:Name="BeginFadeOut">
-                            <FadeOutThemeAnimation Storyboard.TargetName="ProfileGridView" />
+                        <Storyboard x:Name="GridViewFadeOut">
+                            <DoubleAnimation Storyboard.TargetName="ProfileGridView"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="1.0" To="0.0" Duration="{x:Bind ShortFadeDuration}"
+                                             BeginTime="0"/>
                         </Storyboard>
-                        <Storyboard x:Name="BeginFadeIn">
-                            <FadeInThemeAnimation Storyboard.TargetName="ProfileGridView" />
+                        <Storyboard x:Name="GridViewFadeIn">
+                            <DoubleAnimation Storyboard.TargetName="ProfileGridView"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="0.0" To="1.0" Duration="{x:Bind ShortFadeDuration}"/>
                         </Storyboard>
                     </GridView.Resources>
                     <GridView.ItemTemplate>
@@ -47,34 +80,45 @@
                             <Grid Background="White"
                                   x:Name="DataGrid"
                                   Tapped="Grid_Tapped" 
-                              Margin="10"
-                              Height="200"
-                              Width="150">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="50"/>
-                                    <RowDefinition Height="150"/>
-                                </Grid.RowDefinitions>
-                                <Image x:Name="MyImage"
-                                       Source="{x:Bind Url, Mode=OneWay}"
-                                       Grid.Row="1"
-                                       VerticalAlignment="Top"
-                                       Margin="5"
-                                       Opacity="{x:Bind ImageOpacity, Mode=OneWay}"
-                                       />
-                                <TextBlock Margin="5"
+                                  Margin="10">
+                                <Grid.Resources>
+                                    <Storyboard x:Name="FadeInClickedText">
+                                        <DoubleAnimation Storyboard.TargetName="NameTxt"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="0" To="1" Duration="0:0:0.9"/>
+                                    </Storyboard>
+                                    <Storyboard x:Name="FadeInClickedImage">
+                                        <DoubleAnimation Storyboard.TargetName="imageRectangle"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="0.3" Duration="0:0:0.4"/>
+                                    </Storyboard>
+                                </Grid.Resources>
+                                <Rectangle x:Name="imageRectangle" Opacity="1" ToolTipService.ToolTip="{x:Bind JobTitle, Mode=OneWay}"
+                                    RadiusX="10" RadiusY="10"
+                                    Margin="5">
+                                    <Rectangle.Resources>
+                                    </Rectangle.Resources>
+                                    <Rectangle.Fill>
+                                        <ImageBrush x:Name="MyImage"
+                                                    ImageSource="{x:Bind Url, Mode=OneWay}" 
+                                                    Stretch="UniformToFill"
+                                                    />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <TextBlock Margin="10"
                                         Text="{x:Bind FullName, Mode=OneWay}"
+                                        Foreground="White"
+                                        FontWeight="ExtraBold"
                                         x:Name="NameTxt"
-                                        VerticalAlignment="Center"
+                                        VerticalAlignment="Bottom"
                                         HorizontalAlignment="Center"
-                                        FontSize="18"
+                                        FontSize="20"
                                         TextWrapping="Wrap"
-                                        Opacity="{x:Bind TextOpacity, Mode=OneWay}"
-                                        Grid.Row="0"
                                         />
                             </Grid>
                         </DataTemplate>
                     </GridView.ItemTemplate>
-                </GridView>
+                </controls:AdaptiveGridView>
             </StackPanel>
         </ScrollViewer>
     </Grid>
